@@ -1,8 +1,9 @@
 import { Router } from "express";
-// funciones importadas
-
+import * as Posts from "./controller";
 const routerPost = Router();
 
-routerPost.get("/");
+routerPost.get("/", Posts.getPost);
+routerPost.get("/:id", Posts.getIDPost);
+routerPost.post("/", Posts.postPost);
 
 export default routerPost;
