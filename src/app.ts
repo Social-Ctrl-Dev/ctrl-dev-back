@@ -1,6 +1,6 @@
 import express, { type Application } from "express";
 // import cors from "cors";
-import { routerDemo, routerUser, routerPost } from "./components";
+import { routerDemo, routerUser, routerPost, routerTags } from "./components";
 
 const app: Application = express();
 
@@ -11,5 +11,6 @@ app.use(express.json());
 app.use("/hola", routerDemo);
 app.use("/auth", routerUser);
 app.use("/posts", routerPost);
+app.use("/tags", routerTags);
 
 export default app;
