@@ -29,6 +29,8 @@ model User {
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
 
+  postdb Post[]
+
   @@map("users")
 }
 
@@ -40,4 +42,24 @@ model Rol {
   users       User[]
 
   @@map("rol")
+}
+
+model Post {
+  id    Int    @id @default(autoincrement())
+  title String @db.Char(30)
+  body  String @db.Char(280)
+
+  tags   Tag[]
+  user   User  @relation(fields: [userID], references: [id])
+  userID Int
+
+  @@map("posts")
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @db.Char(20)
+  posts Post[]
+
+  @@map("tags")
 }
