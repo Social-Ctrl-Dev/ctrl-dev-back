@@ -1,10 +1,10 @@
 import { Router } from "express";
-// import funciones
+import * as Tags from "./controller";
 
 const routerTags = Router();
 
-routerTags.get("/");
+routerTags.get("/", Tags.getTag);
 routerTags.get("/:id");
-routerTags.post("/");
+routerTags.post("/", Tags.postTag);
 
 export default routerTags;
