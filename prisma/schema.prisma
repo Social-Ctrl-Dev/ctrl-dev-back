@@ -46,8 +46,8 @@ model Rol {
 
 model Post {
   id    Int    @id @default(autoincrement())
-  title String @db.Char(30)
-  body  String @db.Char(280)
+  title String
+  body  String
 
   tags   Tag[]
   user   User  @relation(fields: [userID], references: [id])
@@ -58,7 +58,7 @@ model Post {
 
 model Tag {
   id    Int    @id @default(autoincrement())
-  name  String @db.Char(20)
+  name  String
   posts Post[]
 
   @@map("tags")

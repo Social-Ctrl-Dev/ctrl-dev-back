@@ -43,20 +43,38 @@ export const postPost = async (
   try {
     const data = req.body;
 
-    const element = await prisma.post.create({
-      data: {
-        title: data.title,
-        body: data.body,
-        tags: { connect: { id: data.tag_id } },
-        user: { connect: { id: data.user_id } },
-      },
-    });
-    return okTrue({
-      res,
-      status: 201,
-      result: element,
-      message: "Post created",
-    });
+    const dataTag = data.tag_id;
+
+    if (dataTag) {
+      const element = await prisma.post.create({
+        data: {
+          title: data.title,
+          body: data.body,
+          tags: { connect: { id: data.tag_id } },
+          user: { connect: { id: data.user_id } },
+        },
+      });
+      return okTrue({
+        res,
+        status: 201,
+        result: element,
+        message: "Post created",
+      });
+    } else {
+      const element = await prisma.post.create({
+        data: {
+          title: data.title,
+          body: data.body,
+          user: { connect: { id: data.user_id } },
+        },
+      });
+      return okTrue({
+        res,
+        status: 201,
+        result: element,
+        message: "Post created",
+      });
+    }
   } catch (error) {
     return okFalse({ res, message: error });
   }
