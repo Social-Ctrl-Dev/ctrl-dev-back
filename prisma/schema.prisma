@@ -11,20 +11,20 @@ datasource db {
 }
 
 model User {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name           String?
-  email          String  @unique
+  email          String   @unique
   phone          String
   link_portfolio String?
   info_profile   String?
   avatar         String?
-  posts          Int @default(0)
+  posts          Int      @default(0)
   code           Int?
   is_verified    Boolean?
   provider       String
-  supabase_uid   String  @unique
-  role Rol? @relation(fields: [role_id], references: [id])
-  role_id Int?
+  supabase_uid   String   @unique
+  role           Rol?     @relation(fields: [role_id], references: [id])
+  role_id        Int?
 
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
@@ -37,7 +37,7 @@ model Rol {
   permissions String
   description String?
   created_at  DateTime? @default(now())
-  users User[]
+  users       User[]
 
   @@map("rol")
 }
