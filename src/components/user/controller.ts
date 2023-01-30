@@ -34,16 +34,18 @@ export const postLogin = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  console.log("ok1");
+  
   try {
     const message = "All ok";
     
-
+    const {user} = await supabase_middleware(req,res);
+    console.log("despeus de middle2");
     
     
-    return okTrue({ res, result: "ok", message: message });
+    return okTrue({ res, result: {user}, message: message });
 
   } catch (error) {
     return okFalse({ res, message: error });
   }
 };
+
