@@ -17,6 +17,21 @@ export const getTag = async (
   }
 };
 
+export const getIDTag = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const idURL = req.params.id;
+
+    const element = await prisma.tag.findMany({ where: { id: Number(idURL) } });
+
+    return okTrue({ res, result: element, message: `Tag ${idURL}` });
+  } catch (error) {
+    return okFalse({ res, message: error });
+  }
+};
+
 export const postTag = async (req: Request, res: Response) => {
   try {
     const data = req.body;
@@ -28,6 +43,21 @@ export const postTag = async (req: Request, res: Response) => {
     });
 
     return okTrue({ res, result: element, message: "Tag created" });
+  } catch (error) {
+    return okFalse({ res, message: error });
+  }
+};
+
+export const deleteTag = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const idURL = req.params.id;
+
+    const element = await prisma.tag.delete({ where: { id: Number(idURL) } });
+
+    return okTrue({ res, result: element, message: "Tag deleted" });
   } catch (error) {
     return okFalse({ res, message: error });
   }
