@@ -11,7 +11,7 @@ export const getPost = async (
 ): Promise<Response> => {
   try {
     const element = await prisma.post.findMany({
-      include: { tags: true, user: true },
+      include: { tags: true, user: true, comment: true },
     });
     return okTrue({ res, result: element, message: "All posts" });
   } catch (error) {

@@ -13,7 +13,7 @@ datasource db {
 model User {
   id             Int      @id @default(autoincrement())
   name           String?
-  email          String  @unique
+  email          String   @unique
   phone          String?
   link_portfolio String?
   info_profile   String?
@@ -29,7 +29,8 @@ model User {
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
 
-  postdb Post[]
+  postdb  Post[]
+  comment Comment[]
 
   @@map("users")
 }
@@ -49,9 +50,10 @@ model Post {
   title String
   body  String
 
-  tags   Tag[]
-  user   User  @relation(fields: [userID], references: [id])
-  userID Int
+  tags    Tag[]
+  comment Comment[]
+  user    User      @relation(fields: [userID], references: [id])
+  userID  Int
 
   @@map("posts")
 }
@@ -62,4 +64,16 @@ model Tag {
   posts Post[]
 
   @@map("tags")
+}
+
+model Comment {
+  id   Int    @id @default(autoincrement())
+  body String
+
+  post   Post @relation(fields: [postID], references: [id])
+  postID Int
+  user   User @relation(fields: [userID], references: [id])
+  userID Int
+
+  @@map("comments")
 }
