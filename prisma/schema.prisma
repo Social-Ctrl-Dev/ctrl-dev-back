@@ -29,7 +29,8 @@ model User {
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
 
-  postdb Post[]
+  postdb  Post[]
+  comment Comment[]
 
   @@map("users")
 }
@@ -71,6 +72,8 @@ model Comment {
 
   post   Post @relation(fields: [postID], references: [id])
   postID Int
+  user   User @relation(fields: [userID], references: [id])
+  userID Int
 
   @@map("comments")
 }

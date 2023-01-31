@@ -42,7 +42,12 @@ export const postTag = async (req: Request, res: Response) => {
       },
     });
 
-    return okTrue({ res, result: element, message: "Tag created" });
+    return okTrue({
+      res,
+      status: 201,
+      result: element,
+      message: "Tag created",
+    });
   } catch (error) {
     return okFalse({ res, message: error });
   }
