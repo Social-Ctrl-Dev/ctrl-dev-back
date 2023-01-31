@@ -10,21 +10,23 @@ export const getPost = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const elements = await prisma.post.findMany({
+    const element = await prisma.post.findMany({
       include: { tags: true, user: true, comment: true },
     });
-    const result = await Promise.all(
-      elements.map(async (element) => {
+
+    const elements = await Promise.all(
+      element.map(async (elem) => {
         const likesCount = await prisma.like.count({
-          where: { post_id: element.id },
+          where: { post_id: elem.id },
         });
         return {
           likesCount,
-          ...element,
+          ...elem,
         };
       })
     );
-    return okTrue({ res, result, message: "All posts with likes count" });
+
+    return okTrue({ res, result:elements, message: "All posts with likes count" });
   } catch (error) {
     return okFalse({ res, message: error });
   }
