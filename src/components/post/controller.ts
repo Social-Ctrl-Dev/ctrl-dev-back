@@ -10,10 +10,21 @@ export const getPost = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const element = await prisma.post.findMany({
+    const elements = await prisma.post.findMany({
       include: { tags: true, user: true, comment: true },
     });
-    return okTrue({ res, result: element, message: "All posts" });
+    const result = await Promise.all(
+      elements.map(async (element) => {
+        const likesCount = await prisma.like.count({
+          where: { post_id: element.id },
+        });
+        return {
+          likesCount,
+          ...element,
+        };
+      })
+    );
+    return okTrue({ res, result, message: "All posts with likes count" });
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -31,7 +42,11 @@ export const getIDPost = async (
       include: { user: true },
     });
 
-    return okTrue({ res, result: element, message: `Posts ${idURL}` });
+    const likesCount = await prisma.like.count({
+      where: { post_id: Number(idURL) },
+    });
+
+    return okTrue({ res, result: {...element, likesCount}, message: `Posts ${idURL}` });
   } catch (error) {
     return okFalse({ res, message: error });
   }
