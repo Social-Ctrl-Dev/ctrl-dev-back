@@ -31,6 +31,7 @@ model User {
 
   postdb  Post[]
   comment Comment[]
+  likes Like[]
 
   @@map("users")
 }
@@ -54,6 +55,7 @@ model Post {
   comment Comment[]
   user    User      @relation(fields: [userID], references: [id])
   userID  Int
+  likes Like[] 
 
   @@map("posts")
 }
@@ -76,4 +78,17 @@ model Comment {
   userID Int
 
   @@map("comments")
+}
+
+model Like {
+  id   Int    @id @default(autoincrement())
+
+  post   Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id Int
+  user   User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int
+  
+  @@unique([post_id, user_id])
+
+  @@map("likes")
 }

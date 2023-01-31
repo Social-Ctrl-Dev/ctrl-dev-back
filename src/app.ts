@@ -6,6 +6,7 @@ import {
   routerPost,
   routerTags,
   routerComment,
+  routerLike,
 } from "./components";
 
 const app: Application = express();
@@ -19,5 +20,6 @@ app.use("/auth", routerUser);
 app.use("/posts", routerPost);
 app.use("/tags", routerTags);
 app.use("/comments", routerComment);
+app.use("/likes", routerLike);
 
 export default app;
