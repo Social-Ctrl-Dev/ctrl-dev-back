@@ -7,7 +7,7 @@ interface InterResponse {
   result?: any;
 }
 
-export function okTrue({ res, status = 200, result, message }: InterResponse): Response {
+export function okTrue({ res, status = 200, message, result}: InterResponse): Response {
   return res.status(status).json({
     ok: true,
     message,
