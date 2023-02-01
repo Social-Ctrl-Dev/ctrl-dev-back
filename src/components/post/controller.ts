@@ -41,7 +41,7 @@ export const getIDPost = async (
 
     const element = await prisma.post.findUnique({
       where: { id: Number(idURL) },
-      include: { user: true },
+      include: { user: true, tags: true },
     });
 
     const likesCount = await prisma.like.count({
