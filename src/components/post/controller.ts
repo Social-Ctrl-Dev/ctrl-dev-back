@@ -11,9 +11,22 @@ export const getPost = async (
 ): Promise<Response> => {
   try {
     const element = await prisma.post.findMany({
-      include: { tags: true, user: true },
+      include: { tags: true, user: true, comment: true },
     });
-    return okTrue({ res, result: element, message: "All posts" });
+
+    const elements = await Promise.all(
+      element.map(async (elem) => {
+        const likesCount = await prisma.like.count({
+          where: { post_id: elem.id },
+        });
+        return {
+          likesCount,
+          ...elem,
+        };
+      })
+    );
+
+    return okTrue({ res, result:elements, message: "All posts with likes count" });
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -28,10 +41,14 @@ export const getIDPost = async (
 
     const element = await prisma.post.findUnique({
       where: { id: Number(idURL) },
-      include: { user: true },
+      include: { user: true, tags: true },
     });
 
-    return okTrue({ res, result: element, message: `Posts ${idURL}` });
+    const likesCount = await prisma.like.count({
+      where: { post_id: Number(idURL) },
+    });
+
+    return okTrue({ res, result: {...element, likesCount}, message: `Posts ${idURL}` });
   } catch (error) {
     return okFalse({ res, message: error });
   }

@@ -13,7 +13,7 @@ datasource db {
 model User {
   id             Int      @id @default(autoincrement())
   name           String?
-  email          String  @unique
+  email          String   @unique
   phone          String?
   link_portfolio String?
   info_profile   String?
@@ -29,7 +29,12 @@ model User {
   created_at DateTime? @default(now())
   updated_at DateTime? @updatedAt
 
-  postdb Post[]
+  postdb  Post[]
+  comment Comment[]
+  likes Like[]
+
+  password  String?
+  phone_is_verified Boolean? @default(false)
 
   @@map("users")
 }
@@ -49,9 +54,11 @@ model Post {
   title String
   body  String
 
-  tags   Tag[]
-  user   User  @relation(fields: [userID], references: [id])
-  userID Int
+  tags    Tag[]
+  comment Comment[]
+  user    User      @relation(fields: [userID], references: [id])
+  userID  Int
+  likes Like[] 
 
   @@map("posts")
 }
@@ -62,4 +69,29 @@ model Tag {
   posts Post[]
 
   @@map("tags")
+}
+
+model Comment {
+  id   Int    @id @default(autoincrement())
+  body String
+
+  post   Post @relation(fields: [postID], references: [id])
+  postID Int
+  user   User @relation(fields: [userID], references: [id])
+  userID Int
+
+  @@map("comments")
+}
+
+model Like {
+  id   Int    @id @default(autoincrement())
+
+  post   Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id Int
+  user   User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int
+  
+  @@unique([post_id, user_id])
+
+  @@map("likes")
 }
