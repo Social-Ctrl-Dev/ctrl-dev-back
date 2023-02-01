@@ -1,10 +1,10 @@
 import express, { type Application } from "express";
-// import cors from "cors";
+import cors from "cors";
 import * as Routes from "./components";
 
 const app: Application = express();
 
-// app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Rutas absolutas;
