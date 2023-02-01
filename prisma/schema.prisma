@@ -33,6 +33,9 @@ model User {
   comment Comment[]
   likes Like[]
 
+  password  String?
+  phone_is_verified Boolean? @default(false)
+
   @@map("users")
 }
 

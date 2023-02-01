@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 export interface IUserData {
   email: string;
   phone: string;
@@ -11,4 +13,19 @@ export interface IUserData {
     email_verified: boolean;
     user_name: string;
   };
+}
+
+export interface IUserUpdateableData {
+  name: string;
+  old_password: string;
+  new_password: string;
+  info_profile: string;
+}
+
+export interface IUserGetData {
+  name: string;
+  email: string;
+  link_portfolio: string;
+  info_profile: string;
+  avatar: string;
 }
