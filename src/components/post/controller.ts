@@ -147,7 +147,7 @@ export const putPost = async (
       },
     });
 
-    return okTrue({ res, result: element, message: "Post updated" });
+    return okTrue({ res, result: element, message: `Post #${idURL} updated` });
   } catch (error) {
     console.log(error);
     return okFalse({ res, message: error });
@@ -168,7 +168,7 @@ export const deletePost = async (
       include: { comment: true },
     });
 
-    return okTrue({ res, result: element, message: "Post deleted" });
+    return okTrue({ res, result: element, message: `Post #${idURL} deleted` });
   } catch (error) {
     return okFalse({ res, message: error });
   }
