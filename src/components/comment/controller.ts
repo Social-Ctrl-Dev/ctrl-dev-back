@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import { PrismaClient } from "@prisma/client";
 import { okTrue, okFalse } from "../../responses";
-import { connect } from "http2";
 
 const prisma = new PrismaClient();
 

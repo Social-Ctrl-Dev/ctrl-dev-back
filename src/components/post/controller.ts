@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { okTrue, okFalse } from "../../responses";
-import { connect } from "http2";
 
 const prisma = new PrismaClient();
 
@@ -26,7 +25,11 @@ export const getPost = async (
       })
     );
 
-    return okTrue({ res, result:elements, message: "All posts with likes count" });
+    return okTrue({
+      res,
+      result: elements,
+      message: "All posts with likes count",
+    });
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -41,14 +44,18 @@ export const getIDPost = async (
 
     const element = await prisma.post.findUnique({
       where: { id: Number(idURL) },
-      include: { user: true, tags: true },
+      include: { user: true, tags: true, comment: true },
     });
 
     const likesCount = await prisma.like.count({
       where: { post_id: Number(idURL) },
     });
 
-    return okTrue({ res, result: {...element, likesCount}, message: `Posts ${idURL}` });
+    return okTrue({
+      res,
+      result: { ...element, likesCount },
+      message: `Posts ${idURL}`,
+    });
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -63,10 +70,14 @@ export const getUserPost = async (
 
     const element = await prisma.post.findMany({
       where: { userID: Number(urlID) },
-      include: { tags: true },
+      include: { tags: true, comment: true },
     });
 
-    return okTrue({ res, result: element, message: "ID posts" });
+    return okTrue({
+      res,
+      result: element,
+      message: `ID posts for user ${urlID}`,
+    });
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -78,7 +89,6 @@ export const postPost = async (
 ): Promise<Response> => {
   try {
     const data = req.body;
-
     const dataTag = data.tag_id;
 
     if (dataTag) {
@@ -89,12 +99,14 @@ export const postPost = async (
           tags: { connect: { id: data.tag_id } },
           user: { connect: { id: data.user_id } },
         },
+        include: { tags: true },
       });
+
       return okTrue({
         res,
         status: 201,
         result: element,
-        message: "Post created",
+        message: "Post created with tag",
       });
     } else {
       const element = await prisma.post.create({
@@ -104,6 +116,7 @@ export const postPost = async (
           user: { connect: { id: data.user_id } },
         },
       });
+
       return okTrue({
         res,
         status: 201,
@@ -134,7 +147,7 @@ export const putPost = async (
       },
     });
 
-    return okTrue({ res, result: element, message: "Post updated" });
+    return okTrue({ res, result: element, message: `Post #${idURL} updated` });
   } catch (error) {
     console.log(error);
     return okFalse({ res, message: error });
@@ -152,9 +165,10 @@ export const deletePost = async (
       where: {
         id: Number(idURL),
       },
+      include: { comment: true },
     });
 
-    return okTrue({ res, result: element, message: "Post deleted" });
+    return okTrue({ res, result: element, message: `Post #${idURL} deleted` });
   } catch (error) {
     return okFalse({ res, message: error });
   }
