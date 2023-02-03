@@ -2,11 +2,7 @@ import type { Request, Response } from "express";
 import { okTrue, okFalse } from "../../responses";
 const supabase_middleware = require("../../middleware/supabase-middleware");
 import { PrismaClient } from "@prisma/client";
-import {
-  IUserData,
-  IUserUpdateableData,
-  IUserGetData,
-} from "../../interface/user";
+import { IUserData } from "../../interface/user";
 import { supabase } from "../../services/supabase";
 const bcrypt = require("bcrypt");
 
