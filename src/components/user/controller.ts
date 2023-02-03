@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { IUserData } from "../../interface/user";
 import { supabase } from "../../services/supabase";
 const bcrypt = require("bcrypt");
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -170,17 +171,19 @@ export const postPhoneVerificationRequest = async (
     if (userBase) {
       await updateUserPhoneCode(id, phone, code);
 
-      const response2 = await fetch(urlLambda ?? "", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      await axios.post(
+        urlLambda || "",
+        {
           name,
           phone,
           code,
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return okTrue({
         res,
         result: null,
@@ -195,10 +198,10 @@ export const postPhoneVerificationRequest = async (
 
 export const postPhoneVerification = async (
   req: Request,
-  res: Response,
-  ): Promise<Response> => {
+  res: Response
+): Promise<Response> => {
   try {
-    const { id, code} = req.body;
+    const { id, code } = req.body;
     const userCode = await prisma.user.findUnique({
       where: { id },
       select: {
@@ -206,24 +209,27 @@ export const postPhoneVerification = async (
       },
     });
 
-    if(userCode){
-      if (userCode.code === Number(code)){
-        const element = await prisma.user.update({
+    if (userCode) {
+      if (userCode.code === Number(code)) {
+        await prisma.user.update({
           where: { id },
           data: {
-            phone_is_verified: true
+            phone_is_verified: true,
           },
         });
-        return okTrue({ res, result: null, message: "Phone verification successful." });
+        return okTrue({
+          res,
+          result: null,
+          message: "Phone verification successful.",
+        });
       }
       return okTrue({ res, result: null, message: "Incorrect code." });
     }
     return okTrue({ res, result: userCode, message: "User does not exist." });
-
   } catch (error) {
     return okFalse({ res, message: error });
   }
-}
+};
 
 async function findUser(id: number) {
   try {
@@ -236,13 +242,9 @@ async function findUser(id: number) {
   }
 }
 
-async function updateUserPhoneCode(
-  id: number, 
-  phone: string, 
-  code: number
-  ) {
+async function updateUserPhoneCode(id: number, phone: string, code: number) {
   try {
-    const element = await prisma.user.update({
+    await prisma.user.update({
       where: { id },
       data: {
         phone: phone,
