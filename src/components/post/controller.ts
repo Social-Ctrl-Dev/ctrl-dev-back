@@ -143,13 +143,39 @@ export const putPost = async (
       data: {
         title: data.title,
         body: data.body,
-        tags: { connect: { id: data.tag_id } },
+        tags: { connect: data.tag_id.map((tag: number) => ({ id: tag })) },
       },
     });
 
     return okTrue({ res, result: element, message: `Post #${idURL} updated` });
   } catch (error) {
     console.log(error);
+    return okFalse({ res, message: error });
+  }
+};
+
+export const putTagPost = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const idURL = req.params.id;
+    const data = req.body;
+
+    const element = await prisma.post.update({
+      where: { id: Number(idURL) },
+      include: { tags: true },
+      data: {
+        tags: { disconnect: data.tag_id.map((tag: number) => ({ id: tag })) },
+      },
+    });
+
+    return okTrue({
+      res,
+      result: element,
+      message: `Tags from post #${idURL} deleted`,
+    });
+  } catch (error) {
     return okFalse({ res, message: error });
   }
 };
