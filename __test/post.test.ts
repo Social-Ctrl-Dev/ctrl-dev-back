@@ -82,8 +82,8 @@ describe("Test API Posts - Get Post by User", () => {
 describe("Test API POST - POST a Post", () => {
   it("POST a Post", async () => {
     const response = await axios.post(`http://localhost:${NODE_PORT}/posts`, {
-      title: "test-delete",
-      body: "test-delete",
+      title: "post-test-delete",
+      body: "post-test-delete",
       user_id: 1,
     });
 
@@ -92,25 +92,25 @@ describe("Test API POST - POST a Post", () => {
 });
 
 // * Test 5
-describe("Test API POST - DELETE a Post", () => {
-  it("DELETE a Post", async () => {
-    const response = await axios.delete(
-      `http://localhost:${NODE_PORT}/demo/test`
-    );
+describe("Test API POST - PUT a Post", () => {
+  it("PUT a Post", async () => {
+    const response = await axios.put(`http://localhost:${NODE_PORT}/posts/1`, {
+      title: "Post 1",
+      body: "Body 1",
+      user_id: 1,
+      tag_id: [1, 2, 4],
+    });
 
     expect(response.status).toBe(200);
   }, 15000);
 });
 
 // * Test 6
-describe("Test API POST - PUT a Post", () => {
-  it("PUT a Post", async () => {
-    const response = await axios.put(`http://localhost:${NODE_PORT}/posts/1`, {
-      title: "test-delete",
-      body: "test-delete",
-      user_id: 1,
-      tag_id: [1, 2, 4],
-    });
+describe("Test API POST - DELETE a Post", () => {
+  it("DELETE a Post", async () => {
+    const response = await axios.delete(
+      `http://localhost:${NODE_PORT}/test/test`
+    );
 
     expect(response.status).toBe(200);
   }, 15000);

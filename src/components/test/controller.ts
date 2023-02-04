@@ -18,18 +18,34 @@ export const getDemo = async (
   }
 };
 
-export const deleteTest = async (
+export const deleteTestPost = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const element = await prisma.post.deleteMany({
-      where: { title: "test-delete" },
+      where: { title: "post-test-delete" },
     });
 
     return okTrue({ res, result: element, message: "Delete all test posts" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return okFalse({ res, message: error });
+  }
+};
+
+export const deleteTestTag = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const element = await prisma.tag.deleteMany({
+      where: { name: "tag-test-delete" },
+    });
+
+    return okTrue({ res, result: element, message: "Delete all test tags" });
+  } catch (error) {
+    console.log(error);
     return okFalse({ res, message: error });
   }
 };
