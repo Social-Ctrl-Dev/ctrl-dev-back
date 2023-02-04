@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getDemo, deleteTestTag, deleteTestPost } from "./controller";
+import * as Test from "./controller";
 
 const routerTest = Router();
 
-routerTest.get("/", getDemo);
-routerTest.delete("/test", deleteTestPost);
-routerTest.delete("/test2", deleteTestTag);
+routerTest.get("/", Test.getDemo);
+routerTest.delete("/test", Test.deleteTestPost);
+routerTest.delete("/test2", Test.deleteTestTag);
+routerTest.delete("/test3", Test.deleteTestComment);
 
 export default routerTest;

@@ -49,3 +49,23 @@ export const deleteTestTag = async (
     return okFalse({ res, message: error });
   }
 };
+
+export const deleteTestComment = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const element = await prisma.comment.deleteMany({
+      where: { body: "comment-test-delete" },
+    });
+
+    return okTrue({
+      res,
+      result: element,
+      message: "Delete all test comments",
+    });
+  } catch (error) {
+    console.log(error);
+    return okFalse({ res, message: error });
+  }
+};
