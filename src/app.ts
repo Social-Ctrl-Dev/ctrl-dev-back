@@ -8,7 +8,7 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Rutas absolutas;
-app.use("/hola", Routes.routerDemo);
+app.use("/demo", Routes.routerDemo);
 app.use("/auth", Routes.routerUser);
 app.use("/posts", Routes.routerPost);
 app.use("/tags", Routes.routerTags);
