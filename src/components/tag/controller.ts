@@ -22,12 +22,19 @@ export const getIDTag = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const idURL = req.params.id;
+    const idURL:string = req.params.id;
 
-    const element = await prisma.tag.findMany({ where: { id: Number(idURL) } });
+    const element = await prisma.tag.findUnique({
+      where: { id: Number(idURL) },
+    });
 
-    return okTrue({ res, result: element, message: `Tag #${idURL}` });
+    if (element) {
+      return okTrue({ res, result: element, message: `Tag #${idURL}` });
+    } else {
+      return okFalse({ res, status: 404, message: `Tag #${idURL} not found` });
+    }
   } catch (error) {
+    console.log(error);
     return okFalse({ res, message: error });
   }
 };

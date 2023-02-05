@@ -51,11 +51,15 @@ export const getIDPost = async (
       where: { post_id: Number(idURL) },
     });
 
-    return okTrue({
-      res,
-      result: { ...element, likesCount },
-      message: `Posts ${idURL}`,
-    });
+    if (element) {
+      return okTrue({
+        res,
+        result: { ...element, likesCount },
+        message: `Posts ${idURL}`,
+      });
+    } else {
+      return okFalse({ res, status: 404, message: "Post not found" });
+    }
   } catch (error) {
     return okFalse({ res, message: error });
   }
@@ -73,11 +77,19 @@ export const getUserPost = async (
       include: { tags: true, comment: true },
     });
 
-    return okTrue({
-      res,
-      result: element,
-      message: `ID posts for user ${urlID}`,
-    });
+    if (element.length > 0) {
+      return okTrue({
+        res,
+        result: element,
+        message: `ID posts for user ${urlID}`,
+      });
+    } else {
+      return okFalse({
+        res,
+        status: 404,
+        message: `Post from user ${urlID} not found`,
+      });
+    }
   } catch (error) {
     return okFalse({ res, message: error });
   }
