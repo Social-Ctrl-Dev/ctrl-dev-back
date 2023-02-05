@@ -60,7 +60,7 @@ export const postLogin = async (
           return okTrue({ res, result: null, message: "Incorrect Password." });
         }
       } else {
-        return okTrue({ res, result: null, message: "E-mail incorrecto." });
+        return okTrue({ res, result: null, message: "Incorrect email." });
       }
     }
   } catch (error) {
@@ -156,6 +156,28 @@ export const getUser = async (
     return okFalse({ res, message: error });
   }
 };
+
+export const putUserNameInfo = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+
+    const { id, name, info_profile } = req.body;
+
+    const element = await prisma.user.update({
+      where: { id },
+      data: { 
+        name, 
+        info_profile
+      }
+    })
+    
+    return okTrue({ res, result: element, message: "User updated." });
+  } catch (error) {
+    return okFalse({ res, message: error });
+  }
+}
 
 export const postPhoneVerificationRequest = async (
   req: Request,
@@ -269,13 +291,13 @@ async function createUser(user: IUserData) {
     if (!existing_user) {
       const user_data = await prisma.user.create({
         data: {
-          name: user.user_metadata.user_name,
+          name: user.user_metadata.preferred_username,
           email: user.email,
           phone: "0",
           provider: user.identities[0].provider,
           supabase_uid: user.id,
           link_portfolio:
-            "https://github.com/" + user.user_metadata.preferred_username,
+            "https://github.com/" + user.user_metadata.user_name,
           avatar: user.user_metadata.avatar_url,
           is_verified: user.user_metadata.email_verified,
         },
