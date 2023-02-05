@@ -13,7 +13,7 @@ app.use("/posts", Routes.routerPost);
 app.use("/tags", Routes.routerTags);
 app.use("/comments", Routes.routerComment);
 app.use("/likes", Routes.routerLike);
-app.use("/test", Routes.routerTest);
+// app.use("/test", Routes.routerTest);
 app.use("/webhooks", Routes.routerWebhook);
 
 export default app;
