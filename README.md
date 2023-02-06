@@ -8,3 +8,16 @@ Docs API:
 - Documentación API: [Tags](https://documenter.getpostman.com/view/25626355/2s935kP6Fw)
 - Documentación API: [User](https://documenter.getpostman.com/view/15600249/2s935kPRb5)
 - Documentación API: [Likes](https://documenter.getpostman.com/view/15600249/2s935kPRCt)
+
+# Desarrollo
+Crear archivo `.env` en raíz y completar con los datos del `.env.example`.
+
+Ejecutar el comando para instalar dependencias
+```
+npm install
+```
+
+Ejecutar el entorno de desarrollo
+```bash
+npm run dev
+```
