@@ -162,22 +162,21 @@ export const putUserNameInfo = async (
   res: Response
 ): Promise<Response> => {
   try {
-
     const { id, name, info_profile } = req.body;
 
     const element = await prisma.user.update({
       where: { id },
-      data: { 
-        name, 
-        info_profile
-      }
-    })
-    
+      data: {
+        name,
+        info_profile,
+      },
+    });
+
     return okTrue({ res, result: element, message: "User updated." });
   } catch (error) {
     return okFalse({ res, message: error });
   }
-}
+};
 
 export const postPhoneVerificationRequest = async (
   req: Request,
@@ -296,8 +295,7 @@ async function createUser(user: IUserData) {
           phone: "0",
           provider: user.identities[0].provider,
           supabase_uid: user.id,
-          link_portfolio:
-            "https://github.com/" + user.user_metadata.user_name,
+          link_portfolio: "https://github.com/" + user.user_metadata.user_name,
           avatar: user.user_metadata.avatar_url,
           is_verified: user.user_metadata.email_verified,
         },

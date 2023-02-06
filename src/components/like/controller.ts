@@ -44,7 +44,7 @@ const unlike = async (data: ILikeExistsData) => {
   const id = data.id;
 
   const res = await prisma.like.delete({
-    where: {id},
+    where: { id },
   });
   return res;
 };
