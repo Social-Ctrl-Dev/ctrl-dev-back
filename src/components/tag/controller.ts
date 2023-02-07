@@ -22,12 +22,19 @@ export const getIDTag = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const idURL = req.params.id;
+    const idURL:string = req.params.id;
 
-    const element = await prisma.tag.findMany({ where: { id: Number(idURL) } });
+    const element = await prisma.tag.findUnique({
+      where: { id: Number(idURL) },
+    });
 
-    return okTrue({ res, result: element, message: `Tag ${idURL}` });
+    if (element) {
+      return okTrue({ res, result: element, message: `Tag #${idURL}` });
+    } else {
+      return okFalse({ res, status: 404, message: `Tag #${idURL} not found` });
+    }
   } catch (error) {
+    console.log(error);
     return okFalse({ res, message: error });
   }
 };
@@ -53,6 +60,32 @@ export const postTag = async (req: Request, res: Response) => {
   }
 };
 
+export const putTag = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const idURL = req.params.id;
+    const data = req.body;
+
+    const element = await prisma.tag.update({
+      where: { id: Number(idURL) },
+      data: {
+        name: data.name,
+      },
+    });
+
+    return okTrue({
+      res,
+      status: 202,
+      result: element,
+      message: `Tag #${idURL} updated`,
+    });
+  } catch (error) {
+    return okFalse({ res, message: error });
+  }
+};
+
 export const deleteTag = async (
   req: Request,
   res: Response
@@ -62,7 +95,7 @@ export const deleteTag = async (
 
     const element = await prisma.tag.delete({ where: { id: Number(idURL) } });
 
-    return okTrue({ res, result: element, message: "Tag deleted" });
+    return okTrue({ res, result: element, message: `Tag #${idURL} deleted` });
   } catch (error) {
     return okFalse({ res, message: error });
   }
